@@ -1,5 +1,6 @@
 import 'package:day08/day08.dart';
 import 'package:test/test.dart';
+import 'dart:math';
 
 void main() {
   test('test1', () {
@@ -51,5 +52,14 @@ void main() {
 
     final steps = countStepsParallelNaive(startNode, endNode, directions, nodeMap);
     expect(steps, equals(6));
+
+    final steps2 = countStepsParallelOptimised(startNode, endNode, directions, nodeMap);
+    expect(steps2, equals(6));
+  });
+
+  test('lcm vector test', (){
+    expect(lcm([3,5,15,2,6]), equals(30));
+    expect(lcm([0,1]), equals(30));
+    expect(lcm([1,2,3,4,5,6,7,8,9,10]), equals(2520));
   });
 }

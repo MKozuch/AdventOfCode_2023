@@ -11,14 +11,14 @@ void main() {
   final nodeMapStrings = lines.skip(2);
   final nodeMap = parseNodeMapStrings(nodeMapStrings);
 
-  // final startNode = 'AAA';
-  // final endNode = RegExp('ZZZ');
-  
-  // var steps = countSteps(startNode, endNode, directions, nodeMap);
-  // print('Part1 result: $steps');
+  final startNode = 'AAA';
+  final endNode = RegExp('ZZZ');
+
+  var steps = countSteps(startNode, endNode, directions, nodeMap);
+  print('Part1 result: $steps');
 
   final startNode2 = RegExp(r'^\w+A$');
   final endNode2   = RegExp(r'^\w+Z$');
-  var steps2 = countStepsParallelNaive(startNode2, endNode2, directions, nodeMap);
+  var steps2 = countStepsParallelOptimised(startNode2, endNode2, directions, nodeMap);
   print('Part2 result: $steps2');
 }
