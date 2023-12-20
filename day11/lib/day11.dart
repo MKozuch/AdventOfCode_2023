@@ -40,7 +40,7 @@ int manhattanDist(UniverseCoord p1, UniverseCoord p2){
   return (p2.column-p1.column).abs() + (p2.line-p1.line).abs();
 }
 
-int calculateDistance(final UniverseCoord p1, final UniverseCoord p2, final List<int> expandedLines, final List<int> expandedColumns){
+int calculateDistance(final UniverseCoord p1, final UniverseCoord p2, final List<int> expandedLines, final List<int> expandedColumns, {final int expansionMultiplier = 2}){
 
   final (left, right) = (min(p1.column, p2.column), max(p1.column, p2.column));
   final passingThroughExpandedColumnsCount = 
@@ -52,7 +52,7 @@ int calculateDistance(final UniverseCoord p1, final UniverseCoord p2, final List
     expandedLines.where((element) => element > up && element < down)
     .length;
 
-  return manhattanDist(p1, p2) + passingThroughExpandedLinesCount + passingThroughExpandedColumnsCount;
+  return manhattanDist(p1, p2) + (passingThroughExpandedLinesCount + passingThroughExpandedColumnsCount)*(expansionMultiplier-1);
 }
 
 
@@ -63,7 +63,7 @@ class UniverseMap{
   late Map<int, UniverseCoord> galaxies;
   late Map<(int, int), int> galaxiesDistances;
 
-  UniverseMap.fromLines(Iterable<String> lines){
+  UniverseMap.fromLines(Iterable<String> lines, {final int expansionMultiplier = 2}){
     assert(lines.isNotEmpty);
     assert(lines.every((element) => RegExp(r'^[\.#]+$').hasMatch(element)));
     final width = lines.first.length;
@@ -79,14 +79,10 @@ class UniverseMap{
     galaxiesDistances = {};
     for(final lhs in galaxies.entries){
       for(final rhs in galaxies.entries){
-        if(rhs.key <= lhs.key) continue;
+        if(rhs.key < lhs.key) continue;
 
-        galaxiesDistances[(lhs.key, rhs.key)] = calculateDistance(lhs.value, rhs.value, expandedLines, expandedColumns);
+        galaxiesDistances[(lhs.key, rhs.key)] = calculateDistance(lhs.value, rhs.value, expandedLines, expandedColumns, expansionMultiplier: expansionMultiplier);
       }
     }
   }
-
-
-
-
 }

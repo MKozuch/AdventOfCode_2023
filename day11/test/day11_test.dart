@@ -10,21 +10,23 @@ void main() {
     expect(rotatedArr, equals([[1,4],[2,5],[3,6]]));
   });
 
+  var lines = [
+    "...#......", // 0
+    ".......#..",
+    "#.........",
+    "..........",
+    "......#...", // 4
+    ".#........",
+    ".........#",
+    "..........",
+    ".......#..", // 8
+    "#...#.....",
+  ];
+
   group('description', () {
     late UniverseMap universe;
     setUp(() {
-      universe = UniverseMap.fromLines([
-        "...#......", // 0
-        ".......#..",
-        "#.........",
-        "..........",
-        "......#...", // 4
-        ".#........",
-        ".........#",
-        "..........",
-        ".......#..", // 8
-        "#...#.....",
-      ]);
+      universe = UniverseMap.fromLines(lines);
     });
 
     test('void indexes', () {
@@ -71,8 +73,26 @@ void main() {
       expect(answer, equals(374));
     });
 
+    test('final answer with 100 expansion', () {
+      var answer = universe.galaxiesDistances.entries.map((e) => e.value).reduce((value, element) => value+element);
+      for(var item in universe.galaxiesDistances.entries){
+        print("${item.key.$1} - ${item.key.$2}\t${item.value}");
+      }
+      expect(answer, equals(374));
+    });
   });
 
+  test('final answer with 100 expansion', (){
+    final universeMap = UniverseMap.fromLines(lines, expansionMultiplier: 100);
+    final answer = universeMap.galaxiesDistances.entries.map((e) => e.value).reduce((value, element) => value+element);
+    expect(answer, equals(8410));
+  });
+
+  test('final answer with 10 expansion', (){
+    final universeMap = UniverseMap.fromLines(lines, expansionMultiplier: 10);
+    final answer = universeMap.galaxiesDistances.entries.map((e) => e.value).reduce((value, element) => value+element);
+    expect(answer, equals(1030));
+  });
 }
 
   
