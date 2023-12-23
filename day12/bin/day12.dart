@@ -16,14 +16,14 @@ void main() {
 
   final stopwatch = Stopwatch()..start();
 
-  // int total = 0;
-  // for(final inputItem in input){
-  //   final springList = inputItem.$1;
-  //   final groupings = inputItem.$2;
-  //   total += countValidReplacements(springList, groupings); 
-  // }
-  // print("Part 1 solution: $total");
-  // print('"Part 1 executed in ${stopwatch.elapsed}');
+  int total = 0;
+  for(final inputItem in input){
+    final springList = inputItem.$1;
+    final groupings = inputItem.$2;
+    total += countValidReplacements2(springList, groupings); 
+  }
+  print("Part 1 solution: $total");
+  print('"Part 1 executed in ${stopwatch.elapsed}');
 
   stopwatch.reset();
   int total2 = 0;
@@ -33,7 +33,7 @@ void main() {
 
     (springList, groupings) = unfold(inputItem);
     print('checking line ${springList.repr()}');
-    total2 += countValidReplacements(springList, groupings); 
+    total2 += countValidReplacements2(springList, groupings); 
   }
   print("Part 2 solution: $total2");
   print('"Part 2 executed in ${stopwatch.elapsed}');

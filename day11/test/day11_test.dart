@@ -70,7 +70,7 @@ void main() {
       for(var item in universe.galaxiesDistances.entries){
         print("${item.key.$1} - ${item.key.$2}\t${item.value}");
       }
-      expect(answer, equals(374));
+      expect(answer, equals(8410));
     });
 
     test('final answer with 100 expansion', () {
