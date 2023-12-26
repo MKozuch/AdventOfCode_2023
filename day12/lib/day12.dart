@@ -46,6 +46,13 @@ extension SpringListExtension on SpringList{
     }
     return result;
   }
+
+  int countBadSprings(){
+    return map((e) => e==Spring.bad ? 1:0).reduce((value, element) => value+element);
+  }
+  int countUnknownSprings(){
+    return map((e) => e==Spring.unknown ? 1:0).reduce((value, element) => value+element);
+  }
 }
 
 Iterable<List<Spring>> generateAllCombinations(int n, int k) sync*{
@@ -177,7 +184,6 @@ int countValidReplacements2(SpringList springList, List<int> groupings){
   final knownBadSpringsCount = springList.map((e) => e==Spring.bad ? 1 : 0).reduce((value, element) => value+element); 
   final unknownSymbolsCount = springList.map((e) => e==Spring.unknown ? 1 : 0).reduce((value, element) => value+element);
   final newBadSpringsCount = expectedBadSpringsTotalCount - knownBadSpringsCount;
-  // final expectedIterations = newtonSymbol(unknownSymbolsCount, newBadSpringsCount);
 
   if(newBadSpringsCount == 0){
     var testSpringList = springList.map((e) => switch(e){
@@ -219,14 +225,82 @@ int countValidReplacements2(SpringList springList, List<int> groupings){
   return result;
 }
 
-int factorial(int x){
-  int ret = 1;
-  for(int i=1; i<=x; ++i){
-    ret *= i;
-  }
-  return ret;
+bool isFinalAnswer(SpringList springList){
+  return springList.countUnknownSprings() == 0;
 }
 
-int newtonSymbol(int n, int k){
-  return factorial(n) ~/ (factorial(k) * factorial(n-k));
+// check if fully dfined groupings match expected 
+bool couldBeSolution(SpringList springList, List<int> groupings){
+  final expectedBadSpringCount = groupings.reduce((value, element) => value+element);
+  final currentBadSpringCount = springList.map((e) => e==Spring.bad ? 1 : 0).reduce((value, element) => value + element);
+  if(currentBadSpringCount > expectedBadSpringCount) return false;
+
+  List<SpringList> chunks = [];
+  SpringList chunk = [];
+
+  // split to chunks  of unknowns and bad
+  for(final item in springList){
+    if(item == Spring.good){
+      if(chunk.isNotEmpty) chunks.add(SpringList.from(chunk));
+      chunk.clear();
+    }
+    else{
+      chunk.add(item);
+    }
+  }
+  if(chunk.isNotEmpty) chunks.add(SpringList.from(chunk));
+
+  for(final item in chunks.indexed){
+    if(item.$2.countUnknownSprings() == 0){
+      if(item.$2.countBadSprings() == groupings[item.$1]) {
+        continue;
+      }
+      else{
+        return false;
+      }
+    }
+    return true;
+  }
+  return true;
+}
+
+void calculateValidReplacements(final SpringList springList, final List<int> groupings,  List<SpringList> solutions){
+  // print("checking list: ${springList.repr()}");
+
+  if(isFinalAnswer(springList)){
+    if(validate(springList, groupings)){
+      solutions.add(springList);
+    }
+    
+    return;
+  }
+
+  if(!couldBeSolution(springList, groupings)){
+  print("could not be solution: ${springList.repr()} \t $groupings");
+    return;
+  }
+
+  // replace first unknown with both good and bad
+  final idx = springList.indexOf(Spring.unknown);
+  if(idx == -1){
+    throw Exception('something went wrong');
+  }
+  
+  final leftBranch = SpringList.from(springList);
+  leftBranch[idx] = Spring.bad;
+
+  final rightBranch = SpringList.from(springList);
+  rightBranch[idx] = Spring.good;
+
+  // print("\t ${leftBranch.repr()}");
+  // print("\t ${rightBranch.repr()}");
+
+  calculateValidReplacements(leftBranch, groupings, solutions);
+  calculateValidReplacements(rightBranch, groupings, solutions);
+}
+
+int countValidReplacements3(SpringList springList, List<int> groupings){
+  List<SpringList> solutions = [];
+  calculateValidReplacements(springList, groupings, solutions);
+  return solutions.length;
 }

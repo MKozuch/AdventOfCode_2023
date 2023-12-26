@@ -38,7 +38,6 @@ void main() {
 
   test('checkAllPossibilities', () {
     expect(countValidReplacements(SpringListExtension.fromString('?'),[1]), equals(1));
-  //  expect(countValidReplacements(SpringListExtension.fromString('?'),[]), equals(1));
     expect(countValidReplacements(SpringListExtension.fromString('??'),[2]), equals(1));
     expect(countValidReplacements(SpringListExtension.fromString('?###????????'), [3,2,1]), equals(10));
   });
@@ -73,7 +72,7 @@ void main() {
    expect(countValidReplacements2(SpringListExtension.fromString('????.#...#...'), [4,1,1]), equals(1));
    expect(countValidReplacements2(SpringListExtension.fromString('????.######..#####.'), [1,6,5]), equals(4));
    expect(countValidReplacements2(SpringListExtension.fromString('?###????????'), [3,2,1]), equals(10));
-    expect(countValidReplacements2(SpringListExtension.fromString('?.#?.#???#'), [1,1,1]), equals(1));
+   expect(countValidReplacements2(SpringListExtension.fromString('?.#?.#???#'), [1,1,1]), equals(1));
   });
 
   test('timing1', (){
@@ -121,4 +120,16 @@ void main() {
       expect(validate(SpringListExtension.fromString("#.##.###.####.#####.######.#######.########.#########.##########"), [1,2,3,4,5,6,7,8,9,10,11]), false);
       expect(validate(SpringListExtension.fromString("####"), [4]), true);
     });
+
+  test('cound replacements 3', () {
+      expect(countValidReplacements3(SpringListExtension.fromString('?'),[1]), equals(1));
+      expect(countValidReplacements3(SpringListExtension.fromString('??'),[2]), equals(1));
+      expect(countValidReplacements3(SpringListExtension.fromString('.???.###'), [1,1,3]), equals(1));
+      expect(countValidReplacements3(SpringListExtension.fromString('.??..??...?##.'), [1,1,3]), equals(4));
+      expect(countValidReplacements3(SpringListExtension.fromString('?#?#?#?#?#?#?#?'), [1,3,1,6]), equals(1));
+      expect(countValidReplacements3(SpringListExtension.fromString('????.#...#...'), [4,1,1]), equals(1));
+      expect(countValidReplacements3(SpringListExtension.fromString('????.######..#####.'), [1,6,5]), equals(4));
+      expect(countValidReplacements3(SpringListExtension.fromString('?###????????'), [3,2,1]), equals(10));
+      expect(countValidReplacements3(SpringListExtension.fromString('?.#?.#???#'), [1,1,1]), equals(1));
+  });
 }

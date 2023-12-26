@@ -1,7 +1,6 @@
 import 'package:day12/day12.dart';
 import 'dart:io';
 
-
 void main() {
   final file = File("input/input.txt");
   final lines = file.readAsLinesSync();
@@ -33,7 +32,7 @@ void main() {
 
     (springList, groupings) = unfold(inputItem);
     print('checking line ${springList.repr()}');
-    total2 += countValidReplacements2(springList, groupings); 
+    total2 += countValidReplacements3(springList, groupings); 
   }
   print("Part 2 solution: $total2");
   print('"Part 2 executed in ${stopwatch.elapsed}');
